@@ -12,7 +12,8 @@ import androidx.fragment.app.Fragment;
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 
-import golhar.cocomo.zinger.R;
+import golhar.cocomo.zinger.seller.R;
+
 
 public class Frag2 extends Fragment {
 

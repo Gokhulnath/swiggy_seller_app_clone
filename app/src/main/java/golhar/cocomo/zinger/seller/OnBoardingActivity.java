@@ -8,10 +8,11 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
-import golhar.cocomo.zinger.adapter.ViewPageAdapter;
-import golhar.cocomo.zinger.fragment.Frag1;
-import golhar.cocomo.zinger.fragment.Frag2;
-import golhar.cocomo.zinger.fragment.Frag3;
+import golhar.cocomo.zinger.seller.adapter.ViewPageAdapter;
+import golhar.cocomo.zinger.seller.fragment.Frag1;
+import golhar.cocomo.zinger.seller.fragment.Frag2;
+import golhar.cocomo.zinger.seller.fragment.Frag3;
+
 
 public class OnBoardingActivity extends AppCompatActivity {
 

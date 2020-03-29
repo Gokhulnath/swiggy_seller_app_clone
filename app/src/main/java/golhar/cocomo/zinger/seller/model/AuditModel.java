@@ -3,7 +3,8 @@ package golhar.cocomo.zinger.seller.model;
 
 import java.util.Date;
 
-import golhar.cocomo.zinger.enums.Priority;
+import golhar.cocomo.zinger.seller.enums.Priority;
+
 
 public class AuditModel {
     private Integer id;

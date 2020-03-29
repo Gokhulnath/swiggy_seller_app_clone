@@ -28,5 +28,8 @@ public class Constants {
     public static final String shopDeliveryPrice = "shopDeliveryPrice";
     public static final String orderId = "orderId";
     public static final String transactionId = "transactionId";
+    public static final String role = "role";
+    public static final String sharedPreferencesShopList = "sharedPreferencesShopList";
+    public static final String shopList = "shopList";
 
 }

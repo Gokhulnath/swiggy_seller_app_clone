@@ -1,6 +1,8 @@
 package golhar.cocomo.zinger.seller;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -19,6 +21,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.gson.Gson;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -26,8 +29,8 @@ import java.util.concurrent.TimeUnit;
 
 
 import golhar.cocomo.zinger.seller.enums.UserRole;
-import golhar.cocomo.zinger.seller.model.UserCollegeModel;
 import golhar.cocomo.zinger.seller.model.UserModel;
+import golhar.cocomo.zinger.seller.model.UserShopListModel;
 import golhar.cocomo.zinger.seller.service.MainRepository;
 import golhar.cocomo.zinger.seller.utils.Constants;
 import golhar.cocomo.zinger.seller.utils.ErrorLog;
@@ -48,6 +51,8 @@ public class OtpVerificationActivity extends AppCompatActivity {
     TextInputEditText otpTIET;
     String phNumber;
     String authId;
+    String role;
+    UserRole userRole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,12 @@ public class OtpVerificationActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         phoneAuth = PhoneAuthProvider.getInstance();
         phNumber = SharedPref.getString(getApplicationContext(), Constants.phoneNumber);
+        role = SharedPref.getString(getApplicationContext(),Constants.role);
+        if(UserRole.SELLER.toString().equals(role)){
+            userRole = UserRole.SELLER;
+        }else if(UserRole.SHOP_OWNER.toString().equals(role)){
+            userRole=UserRole.SHOP_OWNER;
+        }
         otpVerifiedBT = findViewById(R.id.otpVerifiedBT);
         numberTV = findViewById(R.id.numberTV);
         numberTV.setText("OTP sent to " + phNumber);
@@ -142,11 +153,60 @@ public class OtpVerificationActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(OtpVerificationActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
                     authId = FirebaseAuth.getInstance().getUid();
+                    UserModel userModel = new UserModel();
+                    userModel.setMobile(phNumber);
+                    userModel.setOauthId(authId);
+                    userModel.setRole(userRole);
+                    userModel.setIsDelete(0);
+                    MainRepository.getUserService().insertSeller(userModel).enqueue(new Callback<Response<UserShopListModel>>() {
+                        @Override
+                        public void onResponse(Call<Response<UserShopListModel>> call, retrofit2.Response<Response<UserShopListModel>> response) {
+                            Response<UserShopListModel> responseFromServer = response.body();
+                            if (responseFromServer.getCode().equals(ErrorLog.CodeSuccess) && responseFromServer.getMessage().equals(ErrorLog.Success)){
+                                UserShopListModel userShopListModel = responseFromServer.getData();
+                                LoadData(userShopListModel);
+                                SharedPref.putString(getApplicationContext(), Constants.userName, userShopListModel.getUserModel().getName());
+                                SharedPref.putString(getApplicationContext(), Constants.userEmail, userShopListModel.getUserModel().getEmail());
+                                SharedPref.putInt(getApplicationContext(),Constants.collegeId,userShopListModel.getShopModelList().get(0).getShopModel().getCollegeModel().getId());
+                                SharedPref.putString(getApplicationContext(),Constants.collegeName,userShopListModel.getShopModelList().get(0).getShopModel().getCollegeModel().getName());
+                                SharedPref.putInt(getApplicationContext(),Constants.shopId,userShopListModel.getShopModelList().get(0).getShopModel().getId());
+                                SharedPref.putString(getApplicationContext(),Constants.authId,authId);
+                                SharedPref.putInt(getApplicationContext(),Constants.loginStatus,1);
+                                Intent dash = new Intent(OtpVerificationActivity.this, DashBoardActivity.class);
+                                finishAffinity();
+                                startActivity(dash);
+                                finish();
+                            }
+                            else
+                            {
+                                Toast.makeText(OtpVerificationActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Response<UserShopListModel>> call, Throwable t) {
+                            Toast.makeText(OtpVerificationActivity.this, "Failure "+t.getMessage(), Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                    });
+
 
                 } else {
                     Toast.makeText(OtpVerificationActivity.this, "Login Failure", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
         });
+    }
+
+
+    void LoadData(UserShopListModel userShopListModels) {
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(Constants.sharedPreferencesShopList, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(userShopListModels);
+        editor.putString(Constants.shopList, json);
+        editor.apply();
     }
 }

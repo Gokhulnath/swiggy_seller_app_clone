@@ -1,0 +1,68 @@
+[
+  {
+    "id": 1,
+    "name": "Chicken Fried Rice",
+    "price": 80.0,
+    "photoUrl": "https://www.foodiesfeed.com/wp-content/uploads/2019/04/mae-mu-oranges-ice-349x436.jpg",
+    "category": "Chinese",
+    "shopModel": null,
+    "isVeg": 0,
+    "isAvailable": 1,
+    "isDelete": 0
+  },
+  {
+    "id": 2,
+    "name": "Chicken Noodles",
+    "price": 90.0,
+    "photoUrl": "https://www.foodiesfeed.com/wp-content/uploads/2019/04/mae-mu-oranges-ice-349x436.jpg",
+    "category": "Chinese",
+    "shopModel": null,
+    "isVeg": 0,
+    "isAvailable": 1,
+    "isDelete": 0
+  },
+  {
+    "id": 3,
+    "name": "Veg Noodles",
+    "price": 60.0,
+    "photoUrl": "https://www.foodiesfeed.com/wp-content/uploads/2019/04/mae-mu-oranges-ice-349x436.jpg",
+    "category": "Chinese",
+    "shopModel": null,
+    "isVeg": 1,
+    "isAvailable": 1,
+    "isDelete": 0
+  },
+  {
+    "id": 4,
+    "name": "Masala Dosa",
+    "price": 45.0,
+    "photoUrl": "https://www.foodiesfeed.com/wp-content/uploads/2019/04/mae-mu-oranges-ice-349x436.jpg",
+    "category": "South Indian",
+    "shopModel": null,
+    "isVeg": 1,
+    "isAvailable": 1,
+    "isDelete": 0
+  },
+  {
+    "id": 5,
+    "name": "Sada Dosa",
+    "price": 35.0,
+    "photoUrl": "https://www.foodiesfeed.com/wp-content/uploads/2019/04/mae-mu-oranges-ice-349x436.jpg",
+    "category": "South Indian",
+    "shopModel": null,
+    "isVeg": 1,
+    "isAvailable": 1,
+    "isDelete": 0
+  },
+  {
+    "id": 6,
+    "name": "Onion Dosa",
+    "price": 50.0,
+    "photoUrl": "https://www.foodiesfeed.com/wp-content/uploads/2019/04/mae-mu-oranges-ice-349x436.jpg",
+    "category": "South Indian",
+    "shopModel": null,
+    "isVeg": 1,
+    "isAvailable": 1,
+    "isDelete": 0
+  }
+]

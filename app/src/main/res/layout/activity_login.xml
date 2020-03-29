@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="golhar.cocomo.zinger.LoginActivity">
+    tools:context=".LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -52,6 +52,22 @@
 
 
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select your Role:"
+            android:textStyle="bold"
+            android:textSize="@dimen/_15ssp"
+            android:paddingVertical="@dimen/_5sdp"
+            android:textColor="#000"/>
+
+        <Spinner
+            android:id="@+id/roleSP"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            />
+
 
         <Button
             android:id="@+id/verifyBT"

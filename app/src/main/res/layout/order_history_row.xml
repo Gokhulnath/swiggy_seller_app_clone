@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fullOrderRL"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/_10sdp"
+    android:visibility="visible">
+
+    <RelativeLayout
+        android:id="@+id/orderRV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/hotelRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_3sdp">
+
+            <TextView
+                android:id="@+id/hotelNameTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:lines="1"
+                android:text="Gangotree"
+                android:textSize="@dimen/_20sdp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/hotelPriceTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/hotelNameTV"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="₹250" />
+
+            <TextView
+                android:id="@+id/hotelStatusTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:text="Picked-up"
+                android:textSize="@dimen/_13ssp" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_5sdp"
+            android:layout_below="@id/hotelRV"
+            android:background="@drawable/dash_line"
+            android:layerType="software" />
+
+        <RelativeLayout
+            android:id="@+id/orderDetailsRV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hotelRV">
+
+            <TextView
+                android:id="@+id/orderItemsTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:text="Sev Puri x1, Dahi Papri Chaat x 1"
+                android:textSize="@dimen/_12ssp"
+                android:maxLines="2"/>
+
+            <TextView
+                android:id="@+id/orderDateTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/orderItemsTV"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="March 5, 5:45 PM" />
+
+            <Button
+                android:id="@+id/reOrderBT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/orderDateTV"
+                android:layout_marginLeft="@dimen/_40sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:background="#fff"
+                android:padding="@dimen/_8sdp"
+                android:text="REORDER"
+                android:textColor="#ff6600" />
+
+            <Button
+                android:id="@+id/rateBT"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/orderDateTV"
+                android:layout_marginLeft="@dimen/_45sdp"
+                android:layout_marginTop="@dimen/_12sdp"
+                android:layout_toRightOf="@+id/reOrderBT"
+                android:background="#fff"
+                android:onClick="showDialog"
+                android:padding="@dimen/_8sdp"
+                android:text="RATE FOOD" />
+
+            <RelativeLayout
+                android:id="@+id/rateRV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rateBT"
+                android:layout_marginLeft="@dimen/_150sdp">
+
+                <TextView
+                    android:id="@+id/orderRateTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5sdp"
+                    android:text="Your food rating" />
+
+                <ImageView
+                    android:id="@+id/starImgIV"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_below="@id/orderRateTV"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_3sdp"
+                    android:src="@drawable/ic_star" />
+
+                <TextView
+                    android:id="@+id/orderRatingTV"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/orderRateTV"
+                    android:layout_marginLeft="-57dp"
+                    android:layout_toRightOf="@id/orderRateTV"
+                    android:text="4"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_4sdp"
+            android:layout_below="@+id/orderDetailsRV"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_marginEnd="-1dp"
+            android:layout_marginBottom="-2dp"
+            android:background="#000" />
+
+    </RelativeLayout>
+</RelativeLayout>

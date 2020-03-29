@@ -6,7 +6,8 @@ import android.os.Parcelable;
 
 import java.util.Date;
 
-import golhar.cocomo.zinger.enums.OrderStatus;
+import golhar.cocomo.zinger.seller.enums.OrderStatus;
+
 
 public class OrderModel implements Parcelable {
     private String id;

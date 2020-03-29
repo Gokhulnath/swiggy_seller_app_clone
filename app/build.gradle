@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "golhar.cocomo.zinger.seller"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -22,6 +22,10 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -49,6 +53,7 @@ dependencies {
     implementation 'me.zhanghai.android.materialratingbar:library:1.4.0'
     implementation 'com.cepheuen.elegant-number-button:lib:1.0.3'
     implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
 
     implementation 'com.google.firebase:firebase-auth:19.3.0'
 }
