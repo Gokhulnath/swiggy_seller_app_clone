@@ -22,7 +22,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -170,6 +173,7 @@ public class OtpVerificationActivity extends AppCompatActivity {
                                 SharedPref.putInt(getApplicationContext(),Constants.collegeId,userShopListModel.getShopModelList().get(0).getShopModel().getCollegeModel().getId());
                                 SharedPref.putString(getApplicationContext(),Constants.collegeName,userShopListModel.getShopModelList().get(0).getShopModel().getCollegeModel().getName());
                                 SharedPref.putInt(getApplicationContext(),Constants.shopId,userShopListModel.getShopModelList().get(0).getShopModel().getId());
+                                SharedPref.putString(getApplicationContext(),Constants.shopName,userShopListModel.getShopModelList().get(0).getShopModel().getName());
                                 SharedPref.putString(getApplicationContext(),Constants.authId,authId);
                                 SharedPref.putInt(getApplicationContext(),Constants.loginStatus,1);
                                 Intent dash = new Intent(OtpVerificationActivity.this, DashBoardActivity.class);
@@ -209,4 +213,6 @@ public class OtpVerificationActivity extends AppCompatActivity {
         editor.putString(Constants.shopList, json);
         editor.apply();
     }
+
+
 }

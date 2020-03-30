@@ -27,8 +27,8 @@ public interface UserService {
     public Call<Response<String>> insertSeller(@Path("mobile") String mobile, @Path("shopId") Integer shopId,
                                                @Header("oauth_id") String oauthId, @Header("mobile") String mobileRh, @Header("role") String role);
 
-    @PATCH(value = "")
-    public Response<String> updateUser(@Body UserModel userModel,
+    @PATCH(value = "/user")
+    public Call<Response<String>> updateUser(@Body UserModel userModel,
                                        @Header("oauth_id") String oauthId, @Header("mobile") String mobileRh, @Header("role") String role);;
 
 }

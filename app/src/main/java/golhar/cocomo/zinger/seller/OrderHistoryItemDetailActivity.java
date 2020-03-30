@@ -66,24 +66,24 @@ public class OrderHistoryItemDetailActivity extends AppCompatActivity {
     Button reOrderBT;
     LinearLayout secretKeyLL;
     TextView secretKeyTV;
+    String role;
+    UserRole userRole;
 
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_history_item_detail);
-        pullToRefresh=findViewById(R.id.pullToRefresh);
-        reOrderBT=findViewById(R.id.reOrderBT);
+        pullToRefresh = findViewById(R.id.pullToRefresh);
         Intent detail = getIntent();
         orderItemListModel = detail.getParcelableExtra("FullOrderDetails");
-        secretKeyLL=findViewById(R.id.secretKeyLL);
-        secretKeyTV=findViewById(R.id.secretKeyTV);
+        secretKeyLL = findViewById(R.id.secretKeyLL);
+        secretKeyTV = findViewById(R.id.secretKeyTV);
         backArrowIB = findViewById(R.id.backArrowIB);
         orderNumTV = findViewById(R.id.orderNumTV);
         statusTV = findViewById(R.id.statusTV);
         itemNumTV = findViewById(R.id.itemNumTV);
         itemCostTV = findViewById(R.id.itemCostTV);
-        hotelTV = findViewById(R.id.hotelTV);
         collegeNameTV = findViewById(R.id.collegeNameTV);
         toTV = findViewById(R.id.toTV);
         toAddTV = findViewById(R.id.toAddTV);
@@ -97,8 +97,6 @@ public class OrderHistoryItemDetailActivity extends AppCompatActivity {
         orderNumTV.setText("ORDER " + "#" + orderItemListModel.getOrderModel().getId());
         itemNumTV.setText(orderItemList.size() + "items");
         itemCostTV.setText("₹" + String.valueOf(orderItemListModel.getOrderModel().getPrice()));
-        hotelTV.setText(orderItemListModel.getOrderModel().getShopModel().getName());
-        collegeNameTV.setText(SharedPref.getString(getApplicationContext(), Constants.collegeName));
         costTV.setText("₹" + String.valueOf(orderItemListModel.getOrderModel().getPrice() - orderItemListModel.getOrderModel().getDeliveryPrice()));
         toTV.setText(orderItemListModel.getOrderModel().getDeliveryLocation());
         toAddTV.setText(SharedPref.getString(getApplicationContext(), Constants.collegeName));
@@ -109,8 +107,14 @@ public class OrderHistoryItemDetailActivity extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("HH:mm:ss");
         Date date1 = orderItemListModel.getOrderModel().getLastStatusUpdatedTime();
         String status = String.valueOf(orderItemListModel.getOrderModel().getOrderStatus());
-        statusChange(date1,status);
+        statusChange(date1, status, orderItemListModel.getOrderModel().getDate());
         secretKeyLL.setVisibility(View.INVISIBLE);
+        role = SharedPref.getString(getApplicationContext(), Constants.role);
+        if (UserRole.SELLER.toString().equals(role)) {
+            userRole = UserRole.SELLER;
+        } else if (UserRole.SHOP_OWNER.toString().equals(role)) {
+            userRole = UserRole.SHOP_OWNER;
+        }
 
         backArrowIB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,48 +128,44 @@ public class OrderHistoryItemDetailActivity extends AppCompatActivity {
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                    getOrderById();
+                getOrderById();
             }
         });
 
 
-
     }
 
-    void getOrderById()
-    {
+    void getOrderById() {
         String phoneNo = SharedPref.getString(getApplicationContext(), Constants.phoneNumber);
         String authId = SharedPref.getString(getApplicationContext(), Constants.authId);
-        MainRepository.getOrderService().getOrderById(orderItemListModel.getOrderModel().getId(),authId,phoneNo, UserRole.CUSTOMER.name()).enqueue(new Callback<Response<OrderModel>>() {
+        MainRepository.getOrderService().getOrderById(orderItemListModel.getOrderModel().getId(), authId, phoneNo, userRole.name()).enqueue(new Callback<Response<OrderModel>>() {
             @Override
             public void onResponse(Call<Response<OrderModel>> call, retrofit2.Response<Response<OrderModel>> response) {
                 Response<OrderModel> responseFromServer = response.body();
-                if (responseFromServer.getCode().equals(ErrorLog.CodeSuccess) && responseFromServer.getMessage().equals(ErrorLog.Success)){
+                if (responseFromServer.getCode().equals(ErrorLog.CodeSuccess) && responseFromServer.getMessage().equals(ErrorLog.Success)) {
                     newOrderModel = responseFromServer.getData();
-                    statusChange(newOrderModel.getLastStatusUpdatedTime(),newOrderModel.getOrderStatus().toString());
-                    if(newOrderModel.getSecretKey()!=null){
+                    statusChange(newOrderModel.getLastStatusUpdatedTime(), newOrderModel.getOrderStatus().toString(), newOrderModel.getDate());
+                    if (newOrderModel.getSecretKey() != null) {
                         secretKeyLL.setVisibility(View.VISIBLE);
                         secretKeyTV.setText(newOrderModel.getSecretKey());
-                    }
-                    else{
+                    } else {
                         secretKeyLL.setVisibility(View.INVISIBLE);
                     }
                     pullToRefresh.setRefreshing(false);
-                }
-                else{
+                } else {
                     pullToRefresh.setRefreshing(false);
                 }
             }
 
             @Override
             public void onFailure(Call<Response<OrderModel>> call, Throwable t) {
-                Toast.makeText(OrderHistoryItemDetailActivity.this, "Failure"+t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(OrderHistoryItemDetailActivity.this, "Failure" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 pullToRefresh.setRefreshing(false);
             }
         });
     }
 
-    void statusChange(Date date1,String status){
+    void statusChange(Date date1, String status, Date getDate) {
         if (date1 != null) {
             Calendar c = Calendar.getInstance();
             Date date2 = c.getTime();
@@ -174,12 +174,14 @@ public class OrderHistoryItemDetailActivity extends AppCompatActivity {
             long minutes = seconds / 60;
             long hours = minutes / 60;
             long days = hours / 24;
-            if (days >0) {
+            if (days > 0) {
                 lastUpdatedTimeTV.setText("Lasted updated " + days + " day ago");
-            }else if (minutes < 60) {
+            } else if (minutes < 60) {
                 lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+            } else if (hours == 1) {
+                lastUpdatedTimeTV.setText("Lasted updated an hour ago");
             } else {
-                lastUpdatedTimeTV.setText("Lasted updated " + hours + " hour " + minutes % 60 + " minute ago");
+                lastUpdatedTimeTV.setText(date1.toString());
             }
         } else {
             lastUpdatedTimeTV.setVisibility(View.INVISIBLE);
@@ -188,34 +190,323 @@ public class OrderHistoryItemDetailActivity extends AppCompatActivity {
         switch (status) {
             case "PENDING":
                 statusTV.setTextColor(Color.parseColor("#006400"));
+                lastUpdatedTimeTV.setVisibility(View.VISIBLE);
+                date1 = getDate;
+                if (date1 != null) {
+                    Calendar c = Calendar.getInstance();
+                    Date date2 = c.getTime();
+                    long diff = date2.getTime() - date1.getTime();
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    if (minutes < 60) {
+                        lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+                    } else if (hours == 1) {
+                        lastUpdatedTimeTV.setText("Lasted updated an hour ago");
+                    } else {
+                        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date1); // Thursday
+                        String day = (String) android.text.format.DateFormat.format("dd", date1); // 20
+                        String monthString = (String) android.text.format.DateFormat.format("MMM", date1); // Jun
+                        String monthNumber = (String) android.text.format.DateFormat.format("MM", date1); // 06
+                        String year = (String) android.text.format.DateFormat.format("yyyy", date1); // 2013
+                        String timehh = (String) android.text.format.DateFormat.format("hh", date1);
+                        String timemm = (String) android.text.format.DateFormat.format("mm", date1);
+                        String ampm="am";
+                        if(Integer.parseInt(timehh)>12){
+                            ampm="pm";
+                        }
+                        lastUpdatedTimeTV.setText("Lasted updated on " + monthString + " " + day + " " + timehh+":"+timemm+ampm);
+                    }
+                }
                 break;
             case "TXN_FAILURE":
                 statusTV.setTextColor(Color.parseColor("#FF0000"));
+                lastUpdatedTimeTV.setVisibility(View.VISIBLE);
+                date1 = getDate;
+                if (date1 != null) {
+                    Calendar c = Calendar.getInstance();
+                    Date date2 = c.getTime();
+                    long diff = date2.getTime() - date1.getTime();
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    if (minutes < 60) {
+                        lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+                    } else if (hours == 1) {
+                        lastUpdatedTimeTV.setText("Lasted updated an hour ago");
+                    } else {
+                        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date1); // Thursday
+                        String day = (String) android.text.format.DateFormat.format("dd", date1); // 20
+                        String monthString = (String) android.text.format.DateFormat.format("MMM", date1); // Jun
+                        String monthNumber = (String) android.text.format.DateFormat.format("MM", date1); // 06
+                        String year = (String) android.text.format.DateFormat.format("yyyy", date1); // 2013
+                        String timehh = (String) android.text.format.DateFormat.format("hh", date1);
+                        String timemm = (String) android.text.format.DateFormat.format("mm", date1);
+                        String ampm="am";
+                        if(Integer.parseInt(timehh)>12){
+                            ampm="pm";
+                        }
+                        lastUpdatedTimeTV.setText("Lasted updated on " + monthString + " " + day + " " + timehh+":"+timemm+ampm);
+                    }
+                }
                 break;
             case "PLACED":
                 statusTV.setTextColor(Color.parseColor("#00FF00"));
+                lastUpdatedTimeTV.setVisibility(View.VISIBLE);
+                date1 = getDate;
+                if (date1 != null) {
+                    Calendar c = Calendar.getInstance();
+                    Date date2 = c.getTime();
+                    long diff = date2.getTime() - date1.getTime();
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    if (minutes < 60) {
+                        lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+                    } else if (hours == 1) {
+                        lastUpdatedTimeTV.setText("Lasted updated an hour ago");
+                    } else {
+                        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date1); // Thursday
+                        String day = (String) android.text.format.DateFormat.format("dd", date1); // 20
+                        String monthString = (String) android.text.format.DateFormat.format("MMM", date1); // Jun
+                        String monthNumber = (String) android.text.format.DateFormat.format("MM", date1); // 06
+                        String year = (String) android.text.format.DateFormat.format("yyyy", date1); // 2013
+                        String timehh = (String) android.text.format.DateFormat.format("hh", date1);
+                        String timemm = (String) android.text.format.DateFormat.format("mm", date1);
+                        String ampm="am";
+                        if(Integer.parseInt(timehh)>12){
+                            ampm="pm";
+                        }
+                        lastUpdatedTimeTV.setText("Lasted updated on " + monthString + " " + day + " " + timehh+":"+timemm+ampm);
+                    }
+                }
                 break;
             case "CANCELLED_BY_USER":
                 statusTV.setTextColor(Color.parseColor("#FF0000"));
+                lastUpdatedTimeTV.setVisibility(View.VISIBLE);
+                date1 = getDate;
+                if (date1 != null) {
+                    Calendar c = Calendar.getInstance();
+                    Date date2 = c.getTime();
+                    long diff = date2.getTime() - date1.getTime();
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    if (minutes < 60) {
+                        lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+                    } else if (hours == 1) {
+                        lastUpdatedTimeTV.setText("Lasted updated an hour ago");
+                    } else {
+                        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date1); // Thursday
+                        String day = (String) android.text.format.DateFormat.format("dd", date1); // 20
+                        String monthString = (String) android.text.format.DateFormat.format("MMM", date1); // Jun
+                        String monthNumber = (String) android.text.format.DateFormat.format("MM", date1); // 06
+                        String year = (String) android.text.format.DateFormat.format("yyyy", date1); // 2013
+                        String timehh = (String) android.text.format.DateFormat.format("hh", date1);
+                        String timemm = (String) android.text.format.DateFormat.format("mm", date1);
+                        String ampm="am";
+                        if(Integer.parseInt(timehh)>12){
+                            ampm="pm";
+                        }
+                        lastUpdatedTimeTV.setText("Lasted updated on " + monthString + " " + day + " " + timehh+":"+timemm+ampm);
+                    }
+                }
                 break;
             case "ACCEPTED":
                 statusTV.setTextColor(Color.parseColor("#e25822"));
+                lastUpdatedTimeTV.setVisibility(View.VISIBLE);
+                date1 = getDate;
+                if (date1 != null) {
+                    Calendar c = Calendar.getInstance();
+                    Date date2 = c.getTime();
+                    long diff = date2.getTime() - date1.getTime();
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    if (minutes < 60) {
+                        lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+                    } else if (hours == 1) {
+                        lastUpdatedTimeTV.setText("Lasted updated an hour ago");
+                    } else {
+                        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date1); // Thursday
+                        String day = (String) android.text.format.DateFormat.format("dd", date1); // 20
+                        String monthString = (String) android.text.format.DateFormat.format("MMM", date1); // Jun
+                        String monthNumber = (String) android.text.format.DateFormat.format("MM", date1); // 06
+                        String year = (String) android.text.format.DateFormat.format("yyyy", date1); // 2013
+                        String timehh = (String) android.text.format.DateFormat.format("hh", date1);
+                        String timemm = (String) android.text.format.DateFormat.format("mm", date1);
+                        String ampm="am";
+                        if(Integer.parseInt(timehh)>12){
+                            ampm="pm";
+                        }
+                        lastUpdatedTimeTV.setText("Lasted updated on " + monthString + " " + day + " " + timehh+":"+timemm+ampm);
+                    }
+                }
                 break;
             case "CANCELLED_BY_SELLER":
                 statusTV.setTextColor(Color.parseColor("#FF0000"));
+                lastUpdatedTimeTV.setVisibility(View.VISIBLE);
+                date1 = getDate;
+                if (date1 != null) {
+                    Calendar c = Calendar.getInstance();
+                    Date date2 = c.getTime();
+                    long diff = date2.getTime() - date1.getTime();
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    if (minutes < 60) {
+                        lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+                    } else if (hours == 1) {
+                        lastUpdatedTimeTV.setText("Lasted updated an hour ago");
+                    } else {
+                        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date1); // Thursday
+                        String day = (String) android.text.format.DateFormat.format("dd", date1); // 20
+                        String monthString = (String) android.text.format.DateFormat.format("MMM", date1); // Jun
+                        String monthNumber = (String) android.text.format.DateFormat.format("MM", date1); // 06
+                        String year = (String) android.text.format.DateFormat.format("yyyy", date1); // 2013
+                        String timehh = (String) android.text.format.DateFormat.format("hh", date1);
+                        String timemm = (String) android.text.format.DateFormat.format("mm", date1);
+                        String ampm="am";
+                        if(Integer.parseInt(timehh)>12){
+                            ampm="pm";
+                        }
+                        lastUpdatedTimeTV.setText("Lasted updated on " + monthString + " " + day + " " + timehh+":"+timemm+ampm);
+                    }
+                }
                 break;
             case "READY":
                 statusTV.setTextColor(Color.parseColor("#e25822"));
+                lastUpdatedTimeTV.setVisibility(View.VISIBLE);
+                date1 = getDate;
+                if (date1 != null) {
+                    Calendar c = Calendar.getInstance();
+                    Date date2 = c.getTime();
+                    long diff = date2.getTime() - date1.getTime();
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    if (minutes < 60) {
+                        lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+                    } else if (hours == 1) {
+                        lastUpdatedTimeTV.setText("Lasted updated an hour ago");
+                    } else {
+                        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date1); // Thursday
+                        String day = (String) android.text.format.DateFormat.format("dd", date1); // 20
+                        String monthString = (String) android.text.format.DateFormat.format("MMM", date1); // Jun
+                        String monthNumber = (String) android.text.format.DateFormat.format("MM", date1); // 06
+                        String year = (String) android.text.format.DateFormat.format("yyyy", date1); // 2013
+                        String timehh = (String) android.text.format.DateFormat.format("hh", date1);
+                        String timemm = (String) android.text.format.DateFormat.format("mm", date1);
+                        String ampm="am";
+                        if(Integer.parseInt(timehh)>12){
+                            ampm="pm";
+                        }
+                        lastUpdatedTimeTV.setText("Lasted updated on " + monthString + " " + day + " " + timehh+":"+timemm+ampm);
+                    }
+                }
                 break;
             case "OUT_FOR_DELIVERY":
                 statusTV.setTextColor(Color.parseColor("#e25822"));
+                lastUpdatedTimeTV.setVisibility(View.VISIBLE);
+                date1 = getDate;
+                if (date1 != null) {
+                    Calendar c = Calendar.getInstance();
+                    Date date2 = c.getTime();
+                    long diff = date2.getTime() - date1.getTime();
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    if (minutes < 60) {
+                        lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+                    } else if (hours == 1) {
+                        lastUpdatedTimeTV.setText("Lasted updated an hour ago");
+                    } else {
+                        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date1); // Thursday
+                        String day = (String) android.text.format.DateFormat.format("dd", date1); // 20
+                        String monthString = (String) android.text.format.DateFormat.format("MMM", date1); // Jun
+                        String monthNumber = (String) android.text.format.DateFormat.format("MM", date1); // 06
+                        String year = (String) android.text.format.DateFormat.format("yyyy", date1); // 2013
+                        String timehh = (String) android.text.format.DateFormat.format("hh", date1);
+                        String timemm = (String) android.text.format.DateFormat.format("mm", date1);
+                        String ampm="am";
+                        if(Integer.parseInt(timehh)>12){
+                            ampm="pm";
+                        }
+                        lastUpdatedTimeTV.setText("Lasted updated on " + monthString + " " + day + " " + timehh+":"+timemm+ampm);
+                    }
+                }
                 break;
             case "COMPLETED":
                 statusTV.setTextColor(Color.parseColor("#00FF00"));
+                lastUpdatedTimeTV.setVisibility(View.VISIBLE);
+                date1 = getDate;
+                if (date1 != null) {
+                    Calendar c = Calendar.getInstance();
+                    Date date2 = c.getTime();
+                    long diff = date2.getTime() - date1.getTime();
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    if (minutes < 60) {
+                        lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+                    } else if (hours == 1) {
+                        lastUpdatedTimeTV.setText("Lasted updated an hour ago");
+                    } else {
+                        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date1); // Thursday
+                        String day = (String) android.text.format.DateFormat.format("dd", date1); // 20
+                        String monthString = (String) android.text.format.DateFormat.format("MMM", date1); // Jun
+                        String monthNumber = (String) android.text.format.DateFormat.format("MM", date1); // 06
+                        String year = (String) android.text.format.DateFormat.format("yyyy", date1); // 2013
+                        String timehh = (String) android.text.format.DateFormat.format("hh", date1);
+                        String timemm = (String) android.text.format.DateFormat.format("mm", date1);
+                        String ampm="am";
+                        if(Integer.parseInt(timehh)>12){
+                            ampm="pm";
+                        }
+                        lastUpdatedTimeTV.setText("Lasted updated on " + monthString + " " + day + " " + timehh+":"+timemm+ampm);
+                    }
+                }
                 break;
             case "DELIVERED":
                 statusTV.setTextColor(Color.parseColor("#00FF00"));
-                lastUpdatedTimeTV.setText("Order Delivered on " + dateFormat.format(orderItemListModel.getOrderModel().getDate()));
+                lastUpdatedTimeTV.setVisibility(View.VISIBLE);
+                date1 = getDate;
+                if (date1 != null) {
+                    Calendar c = Calendar.getInstance();
+                    Date date2 = c.getTime();
+                    long diff = date2.getTime() - date1.getTime();
+                    long seconds = diff / 1000;
+                    long minutes = seconds / 60;
+                    long hours = minutes / 60;
+                    long days = hours / 24;
+                    if (minutes < 60) {
+                        lastUpdatedTimeTV.setText("Lasted updated " + minutes + " minutes ago");
+                    } else if (hours == 1) {
+                        lastUpdatedTimeTV.setText("Lasted updated an hour ago");
+                    } else {
+                        String dayOfTheWeek = (String) android.text.format.DateFormat.format("EEEE", date1); // Thursday
+                        String day = (String) android.text.format.DateFormat.format("dd", date1); // 20
+                        String monthString = (String) android.text.format.DateFormat.format("MMM", date1); // Jun
+                        String monthNumber = (String) android.text.format.DateFormat.format("MM", date1); // 06
+                        String year = (String) android.text.format.DateFormat.format("yyyy", date1); // 2013
+                        String timehh = (String) android.text.format.DateFormat.format("hh", date1);
+                        String timemm = (String) android.text.format.DateFormat.format("mm", date1);
+                        String ampm="am";
+                        if(Integer.parseInt(timehh)>12){
+                            ampm="pm";
+                        }
+                        lastUpdatedTimeTV.setText("Lasted updated on " + monthString + " " + day + " " + timehh+":"+timemm+ampm);
+                    }
+                }
                 break;
         }
     }

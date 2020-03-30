@@ -33,7 +33,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         roleSP = findViewById(R.id.roleSP);
         List<String> list = new ArrayList<String>();
-        list.add("none");
         list.add(UserRole.SHOP_OWNER.name());
         list.add(UserRole.SELLER.name());
         ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(this,R.layout.support_simple_spinner_dropdown_item, list);
@@ -58,16 +57,10 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String phNumber = phoneNumberTIET.getText().toString();
                 if (phNumber.length() == 10 && phNumber != null) {
-                    if(!text.equals("none"))
-                    {
                         SharedPref.putString(getApplicationContext(),Constants.role,text);
                         SharedPref.putString(getApplicationContext(), Constants.phoneNumber, phNumber);
                         Intent otp = new Intent(LoginActivity.this, OtpVerificationActivity.class);
                         startActivity(otp);
-                    }
-                    else{
-                        Toast.makeText(LoginActivity.this, "Please selected your role", Toast.LENGTH_SHORT).show();
-                    }
                 } else {
                     phoneNumberTIET.setError("Please enter valid phone number");
                 }

@@ -119,18 +119,6 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             }
         }
         holder.orderItemTV.setText(item);
-        holder.orderRatingTV.setText(String.valueOf(orderItemListModel.getOrderModel().getRating()));
-        if (String.valueOf(holder.orderRatingTV.getText()).equals("0.0")) {
-            holder.rateBT.setVisibility(View.VISIBLE);
-            holder.orderRatingTV.setVisibility(View.GONE);
-            holder.starImgIV.setVisibility(View.GONE);
-            holder.orderRateTV.setVisibility(View.GONE);
-        } else {
-            holder.rateBT.setVisibility(View.GONE);
-            holder.orderRatingTV.setVisibility(View.VISIBLE);
-            holder.starImgIV.setVisibility(View.VISIBLE);
-            holder.orderRateTV.setVisibility(View.VISIBLE);
-        }
         holder.fullOrderRL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -156,11 +144,6 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
         TextView hotelStatusTV;
         TextView orderItemTV;
         TextView orderDateTV;
-        TextView orderRatingTV;
-        Button rateBT;
-        Button reOrderBT;
-        ImageView starImgIV;
-        TextView orderRateTV;
         RelativeLayout fullOrderRL;
 
         //todo change rv to rl in xml
@@ -171,12 +154,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
             hotelStatusTV = itemView.findViewById(R.id.hotelStatusTV);
             orderItemTV = itemView.findViewById(R.id.orderItemsTV);
             orderDateTV = itemView.findViewById(R.id.orderDateTV);
-            orderRatingTV = itemView.findViewById(R.id.orderRatingTV);
-            rateBT = itemView.findViewById(R.id.rateBT);
-            starImgIV = itemView.findViewById(R.id.starImgIV);
-            orderRateTV = itemView.findViewById(R.id.orderRateTV);
             fullOrderRL = itemView.findViewById(R.id.fullOrderRL);
-            reOrderBT = itemView.findViewById(R.id.reOrderBT);
         }
     }
     void LoadData(ArrayList<OrderItemModel> orderItemModelArrayList) {

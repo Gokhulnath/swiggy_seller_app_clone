@@ -35,7 +35,7 @@
             android:layout_marginRight="@dimen/_10sdp"/>
 
         <TextView
-            android:id="@+id/replaceTV"
+            android:id="@+id/accountTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -49,7 +49,7 @@
             android:id="@+id/msgTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/replaceTV"
+            android:layout_below="@id/accountTV"
             android:layout_centerHorizontal="true"
             android:padding="@dimen/_13sdp"
             android:textSize="@dimen/_13ssp"

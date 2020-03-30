@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar"
         tools:replace="android:theme">
-        <activity android:name=".AccountChangeActivity"></activity>
+        <activity android:name=".AddSellerActivity"></activity>
+        <activity android:name=".NewOrderActivity" />
+        <activity android:name=".AccountChangeActivity" />
         <activity android:name=".EditMenuActivity" />
         <activity android:name=".DashBoardActivity" />
         <activity android:name=".OtpVerificationActivity" />

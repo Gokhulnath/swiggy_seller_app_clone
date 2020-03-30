@@ -115,19 +115,12 @@
                         android:paddingTop="@dimen/_5sdp">
 
                         <TextView
-                            android:id="@+id/hotelTV"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Sathyas"
+                            android:text="Delivery TO\n"
                             android:textColor="#000"
                             android:textSize="@dimen/_15sdp" />
 
-                        <TextView
-                            android:id="@+id/collegeNameTV"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/hotelTV"
-                            android:text="SSN College of Engineering" />
 
                     </RelativeLayout>
 
@@ -203,7 +196,7 @@
         <LinearLayout
             android:id="@+id/listViewLL"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_350sdp"
+            android:layout_height="match_parent"
             android:layout_below="@+id/pullToRefresh"
             android:orientation="vertical">
 
@@ -312,14 +305,7 @@
 
 
 
-        <Button
-            android:id="@+id/reOrderBT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="#fff"
-            android:text="REORDER"
-            android:textColor="#ff9703"></Button>
+
     </RelativeLayout>
 
 

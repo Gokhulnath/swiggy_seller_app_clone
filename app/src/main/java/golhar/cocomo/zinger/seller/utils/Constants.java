@@ -31,5 +31,6 @@ public class Constants {
     public static final String role = "role";
     public static final String sharedPreferencesShopList = "sharedPreferencesShopList";
     public static final String shopList = "shopList";
+    public static final String orderNumber = "orderNumber";
 
 }

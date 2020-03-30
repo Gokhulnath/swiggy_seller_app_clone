@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,13 +91,18 @@ public class ShopMenuItemAdapter extends RecyclerView.Adapter<ShopMenuItemAdapte
             Drawable img = context.getResources().getDrawable(R.drawable.ic_non_vegetarian_mark);
             holder.itemNameTV.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
         }
+        else{
+            Drawable img = context.getResources().getDrawable(R.drawable.ic_vegetarian_mark);
+            holder.itemNameTV.setCompoundDrawablesWithIntrinsicBounds(img, null, null, null);
+        }
         holder.priceTv.setText("₹" + itemModel.getPrice().toString());
         if (itemModel.getIsAvailable() == 0) {
-            holder.editItemBT.setEnabled(false);
-            holder.editItemBT.setText("Not\nAvailable");
-            holder.editItemBT.setTextSize(10);
-            holder.editItemBT.setBackgroundTintList(ContextCompat.getColorStateList(context, R.color.black));
-            holder.editItemBT.setTextColor(Color.WHITE);
+            holder.itemLL.setBackgroundColor(Color.parseColor("#EFEFEF"));
+            holder.priceTv.setText("₹" + itemModel.getPrice().toString()+"\nNot Available");
+        }
+        else{
+            holder.itemLL.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            holder.priceTv.setText("₹" + itemModel.getPrice().toString());
         }
 
         holder.deleteBT.setOnClickListener(new View.OnClickListener() {
@@ -121,8 +127,13 @@ public class ShopMenuItemAdapter extends RecyclerView.Adapter<ShopMenuItemAdapte
                         } else if (UserRole.SHOP_OWNER.toString().equals(role)) {
                             userRole = UserRole.SHOP_OWNER;
                         }
-                        ItemModel itemModel1 = new ItemModel();
-                        itemModel1.setId(itemModel.getId());
+                        ItemModel itemModel1 = itemModel;
+                        itemModel1.setIsDelete(null);
+                        itemModel1.setIsAvailable(null);
+                        itemModel1.setName(null);
+                        itemModel1.setPhotoUrl(null);
+                        itemModel1.setCategory(null);
+                        itemModel1.setPrice(null);
                         MainRepository.getItemService().deleteItemById(itemModel1,authid,phoneNumber,userRole.toString()).enqueue(new Callback<Response<String>>() {
                             @Override
                             public void onResponse(Call<Response<String>> call, retrofit2.Response<Response<String>> response) {
@@ -177,6 +188,7 @@ public class ShopMenuItemAdapter extends RecyclerView.Adapter<ShopMenuItemAdapte
             if (itemModel.getIsVeg() == 1) {
                 isVegSC.setChecked(true);
                 isVeg = 1;
+                isVegIV.setImageResource(R.drawable.ic_vegetarian_mark);
             } else {
                 isVegSC.setChecked(false);
                 isVegIV.setImageResource(R.drawable.ic_non_vegetarian_mark);
@@ -188,6 +200,7 @@ public class ShopMenuItemAdapter extends RecyclerView.Adapter<ShopMenuItemAdapte
                 isAvailable = 1;
             } else {
                 isAvailableSC.setChecked(false);
+                isAvailableIV.setImageResource(R.drawable.ic_no_delivery);
                 isAvailable = 0;
             }
             dialog.setCanceledOnTouchOutside(false);
@@ -290,6 +303,7 @@ public class ShopMenuItemAdapter extends RecyclerView.Adapter<ShopMenuItemAdapte
         TextView priceTv;
         Button editItemBT;
         Button deleteBT;
+        LinearLayout itemLL;
 
         public ItemNameHolder(@NonNull View itemView) {
             super(itemView);
@@ -299,7 +313,7 @@ public class ShopMenuItemAdapter extends RecyclerView.Adapter<ShopMenuItemAdapte
             priceTv = itemView.findViewById(R.id.priceTV);
             editItemBT = itemView.findViewById(R.id.editItemBT);
             deleteBT = itemView.findViewById(R.id.deleteBT);
-
+            itemLL = itemView.findViewById(R.id.itemLL);
         }
     }
 
