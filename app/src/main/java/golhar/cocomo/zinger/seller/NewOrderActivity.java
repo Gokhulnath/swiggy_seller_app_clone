@@ -100,9 +100,10 @@ public class NewOrderActivity extends AppCompatActivity {
                         return LinearSmoothScroller.SNAP_TO_START;
                     }
                 };
-
-        MainRepository.getOrderService().getOrderByMobile("9025118721", pageNumFunc, 5, "JdhGGiU4kPNNPnVdXSUCcognZ5j2",
-                "9025118721", UserRole.CUSTOMER.name()).enqueue(new Callback<Response<List<OrderItemListModel>>>() {
+//todo remove hardcode and populate orders in db
+        //todo remove accept button
+        MainRepository.getOrderService().getOrderByShopIdPagination(2, pageNumFunc, 5, "gjJ5pqjDNheCMrnVJRgIMYye9qy1",
+                "9566220635", UserRole.SHOP_OWNER.name()).enqueue(new Callback<Response<List<OrderItemListModel>>>() {
             @Override
             public void onResponse(Call<Response<List<OrderItemListModel>>> call, retrofit2.Response<Response<List<OrderItemListModel>>> response) {
 

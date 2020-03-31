@@ -110,7 +110,6 @@ public class ShopMenuItemAdapter extends RecyclerView.Adapter<ShopMenuItemAdapte
             public void onClick(View v) {
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
                 View vi = LayoutInflater.from(context).inflate(R.layout.activity_item_delete_prompt, null);
-                TextView msgTV = vi.findViewById(R.id.msgTV);
                 Button noBT = vi.findViewById(R.id.noBT);
                 Button yesBT = vi.findViewById(R.id.yesBT);
                 dialogBuilder.setView(vi);
@@ -135,6 +134,8 @@ public class ShopMenuItemAdapter extends RecyclerView.Adapter<ShopMenuItemAdapte
                                     Toast.makeText(context, "deleted successfully", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();
                                     notifyDataSetChanged();
+                                    //todo on deleting the notifydataset dosent change
+
                                 }
                                 else{
                                     Toast.makeText(context, "failure", Toast.LENGTH_SHORT).show();

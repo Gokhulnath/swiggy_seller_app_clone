@@ -1,6 +1,5 @@
 package golhar.cocomo.zinger.seller;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -10,7 +9,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -23,10 +21,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 
 import golhar.cocomo.zinger.seller.adapter.ShopListAdapter;
@@ -116,32 +114,32 @@ public class AccountChangeActivity extends AppCompatActivity {
             order = shopDetails.getConfigurationModel().getIsOrderTaken();
             mobile = shopDetails.getShopModel().getMobile();
             email = SharedPref.getString(getApplicationContext(), Constants.userEmail);
-            Date close1 = shopDetails.getShopModel().getClosingTime();
-            Date open1 = shopDetails.getShopModel().getOpeningTime();
-            SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
-            close = format.format(shopDetails.getShopModel().getClosingTime());
-            open = format.format(shopDetails.getShopModel().getOpeningTime());
-            SimpleDateFormat hhformat = new SimpleDateFormat("hh");
-            SimpleDateFormat mmformat = new SimpleDateFormat("mm");
-            int hour = Integer.parseInt(hhformat.format(open1));
-            int minutes = Integer.parseInt(mmformat.format(open1));
-            if (hour >= 12) {
-                amPm = "PM";
-                hour -= 12;
-            } else {
-                amPm = "AM";
-            }
-            opening = String.format("%02d:%02d", hour, minutes) + amPm;
-            hour = Integer.parseInt(hhformat.format(close1));
-            minutes = Integer.parseInt(mmformat.format(close1));
-            if (hour >= 12) {
-                amPm = "PM";
-                hour -= 12;
-            } else {
-                amPm = "AM";
-            }
-            closing = String.format("%02d:%02d", hour, minutes) + amPm;
-            shopName=shopDetails.getShopModel().getName();
+//            Date close1 = shopDetails.getShopModel().getClosingTime();
+//            Date open1 = shopDetails.getShopModel().getOpeningTime();
+//            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+//            close = format.format(shopDetails.getShopModel().getClosingTime());
+//            open = format.format(shopDetails.getShopModel().getOpeningTime());
+//            SimpleDateFormat HHformat = new SimpleDateFormat("HH");
+//            SimpleDateFormat mmformat = new SimpleDateFormat("mm");
+//            int hour = Integer.parseInt(HHformat.format(open1));
+//            int minutes = Integer.parseInt(mmformat.format(open1));
+//            if (hour >= 12) {
+//                amPm = "PM";
+//                hour -= 12;
+//            } else {
+//                amPm = "AM";
+//            }
+//            opening = String.format("%02d:%02d", hour, minutes) + amPm;
+//            hour = Integer.parseInt(HHformat.format(close1));
+//            minutes = Integer.parseInt(mmformat.format(close1));
+//            if (hour >= 12) {
+//                amPm = "PM";
+//                hour -= 12;
+//            } else {
+//                amPm = "AM";
+//            }
+//            closing = String.format("%02d:%02d", hour, minutes) + amPm;
+            shopName = shopDetails.getShopModel().getName();
             shopNameTV.setText(shopName);
         }
         accSwitchBT.setOnClickListener(new View.OnClickListener() {
@@ -254,58 +252,58 @@ public class AccountChangeActivity extends AppCompatActivity {
             }
         });
 
-        Calendar calendar = Calendar.getInstance();
-        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int currentMinute = calendar.get(Calendar.MINUTE);
-        closeTV.setText(closing);
-        openTV.setText(opening);
-
-        closeBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AccountChangeActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
-                        if (hourOfDay >= 12) {
-                            amPm = "PM";
-                        } else {
-                            amPm = "AM";
-                        }
-                        closeTV.setText(String.format("%02d:%02d", hourOfDay, minutes) + amPm);
-                        //close = String.format("%02d:%02d:00", hourOfDay, minutes);
-                        int time=(minutes * 60 + hourOfDay * 60 * 60) * 1000;
-                        SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
-                        close = format.format(time);
-
-                    }
-                }, currentHour, currentMinute, false);
-                timePickerDialog.show();
-
-            }
-        });
-        openBT.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                TimePickerDialog timePickerDialog = new TimePickerDialog(AccountChangeActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
-                        if (hourOfDay >= 12) {
-                            amPm = "PM";
-                        } else {
-                            amPm = "AM";
-                        }
-                        openTV.setText(String.format("%02d:%02d", hourOfDay, minutes) + amPm);
-//                        open = String.format("%02d:%02d:00", hourOfDay, minutes);
-                        int time=(minutes * 60 + hourOfDay * 60 * 60) * 1000;
-                        SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
-                        open = format.format(time);
-                    }
-                }, currentHour, currentMinute, false);
-                timePickerDialog.show();
-
-            }
-        });
+//        Calendar calendar = Calendar.getInstance();
+//        int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+//        int currentMinute = calendar.get(Calendar.MINUTE);
+//        closeTV.setText(closing);
+//        openTV.setText(opening);
+//
+//        closeBT.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                TimePickerDialog timePickerDialog = new TimePickerDialog(AccountChangeActivity.this, new TimePickerDialog.OnTimeSetListener() {
+//                    @Override
+//                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
+//                        if (hourOfDay >= 12) {
+//                            amPm = "PM";
+//                        } else {
+//                            amPm = "AM";
+//                        }
+//                        closeTV.setText(String.format("%02d:%02d", hourOfDay, minutes) + amPm);
+//                        //close = String.format("%02d:%02d:00", hourOfDay, minutes);
+//                        int time=(minutes * 60 + hourOfDay * 60 * 60) * 1000;
+//                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+//                        close = format.format(time);
+//
+//                    }
+//                }, currentHour, currentMinute, false);
+//                timePickerDialog.show();
+//
+//            }
+//        });
+//        openBT.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                TimePickerDialog timePickerDialog = new TimePickerDialog(AccountChangeActivity.this, new TimePickerDialog.OnTimeSetListener() {
+//                    @Override
+//                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minutes) {
+//                        if (hourOfDay >= 12) {
+//                            amPm = "PM";
+//                        } else {
+//                            amPm = "AM";
+//                        }
+//                        openTV.setText(String.format("%02d:%02d", hourOfDay, minutes) + amPm);
+////                        open = String.format("%02d:%02d:00", hourOfDay, minutes);
+//                        int time=(minutes * 60 + hourOfDay * 60 * 60) * 1000;
+//                        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+//                        open = format.format(time);
+//                    }
+//                }, currentHour, currentMinute, false);
+//                timePickerDialog.show();
+//
+//            }
+//        });
 
         updateAccountBT.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -346,28 +344,44 @@ public class AccountChangeActivity extends AppCompatActivity {
                 configurationModel1.setIsDeliveryAvailable(del);
                 configurationModel1.setIsOrderTaken(order);
                 ShopModel shopModel = new ShopModel();
-                SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss");
-                Date dateC = null;
+//                SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+//                Date dateC = null;
+//                try {
+//                    dateC = new SimpleDateFormat("HH:mm:ss").parse(close);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                Date datep=null;
+//                try {
+//                    datep = new SimpleDateFormat("HH:mm:ss").parse(open);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//                Calendar cal = Calendar.getInstance();
+//                cal.set(Calendar.HOUR_OF_DAY,17);
+//                cal.set(Calendar.MINUTE,30);
+//                cal.set(Calendar.SECOND,0);
+//                cal.set(Calendar.MILLISECOND,0);
+// todo getting 400 error because of time parsing error
+                SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                String dateString = format.format(new Date());
                 try {
-                    dateC = new SimpleDateFormat("hh:mm:ss").parse(close);
+                    Date date = format.parse(dateString);
+                    shopModel.setOpeningTime(new Time(9,0,0));
+                    shopModel.setClosingTime(new Time(21,0,0));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-
-                Date datep=null;
-                try {
-                    datep = new SimpleDateFormat("hh:mm:ss").parse(open);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                shopModel.setClosingTime(datep);
-                shopModel.setOpeningTime(dateC);
                 shopModel.setName(shopName);
                 shopModel.setMobile(mobile);
                 shopModel.setId(SharedPref.getInt(getApplicationContext(), Constants.shopId));
                 configurationModel1.setShopModel(shopModel);
                 String phoneNo = SharedPref.getString(getApplicationContext(), Constants.phoneNumber);
                 String authId = SharedPref.getString(getApplicationContext(), Constants.authId);
+                configurationModel1=shopDetails.getConfigurationModel();
+                configurationModel1.setDeliveryPrice(100.0);
+                configurationModel1.setShopModel(shopDetails.getShopModel());
                 MainRepository.getShopService().updateShopConfiguration(configurationModel1, authId, phoneNo, userRole.toString()).enqueue(new Callback<Response<String>>() {
                     @Override
                     public void onResponse(Call<Response<String>> call, retrofit2.Response<Response<String>> response) {

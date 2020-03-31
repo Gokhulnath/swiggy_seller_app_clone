@@ -28,6 +28,7 @@ import golhar.cocomo.zinger.seller.R;
 import golhar.cocomo.zinger.seller.model.OrderItemListModel;
 import golhar.cocomo.zinger.seller.model.OrderItemModel;
 import golhar.cocomo.zinger.seller.utils.Constants;
+import golhar.cocomo.zinger.seller.utils.SharedPref;
 
 
 public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapter.OrderHolder> {
@@ -67,7 +68,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<OrderHistoryAdapte
     @Override
     public void onBindViewHolder(@NonNull OrderHolder holder, int position) {
         final OrderItemListModel orderItemListModel = itemList.get(position);
-        holder.hotelNameTV.setText(orderItemListModel.getOrderModel().getShopModel().getName());
+        holder.hotelNameTV.setText(SharedPref.getString(context,Constants.shopName));
         holder.hotelPriceTV.setText("₹" + String.valueOf(orderItemListModel.getOrderModel().getPrice()));
         holder.orderDateTV.setText(dateFormat.format(orderItemListModel.getOrderModel().getDate()));
         String status = String.valueOf(orderItemListModel.getOrderModel().getOrderStatus());

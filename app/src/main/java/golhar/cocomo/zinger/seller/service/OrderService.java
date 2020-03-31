@@ -27,12 +27,13 @@ public interface OrderService {
     Call<Response<List<OrderItemListModel>>> getOrderByMobile(@Path("mobile") String mobile, @Path("pageNum") Integer pageNum, @Path("pageCount") Integer pageCount,
                                                               @Header("oauth_id") String oauthId, @Header("mobile") String mobileRh, @Header("role") String role);
 
+
     @GET("/order/seller/{shopId}/{pageNum}/{pageCount}")
-    Call<Response<List<OrderModel>>> getOrderByShopIdPagination(@Path("shopId") Integer shopId, @Path("pageNum") Integer pageNum, @Path("pageCount") Integer pageCount,
+    Call<Response<List<OrderItemListModel>>> getOrderByShopIdPagination(@Path("shopId") Integer shopId, @Path("pageNum") Integer pageNum, @Path("pageCount") Integer pageCount,
                                                                 @Header("oauth_id") String oauthId, @Header("mobile") String mobileRh, @Header("role") String role);
 
     @GET("/order/seller/{shopId}")
-    public Call<Response<List<OrderModel>>> getOrderByShopId(@Path("shopId") Integer shopId,
+    public Call<Response<List<OrderItemListModel>>> getOrderByShopId(@Path("shopId") Integer shopId,
                                                              @Header("oauth_id") String oauthId, @Header("mobile") String mobileRh, @Header("role") String role);
 
     @GET(value = "/order/{id}")

@@ -104,6 +104,7 @@ public class ShopModel implements Parcelable {
     }
 
 
+
     @Override
     public String toString() {
         return "ShopModel{" +

@@ -6,6 +6,7 @@ import golhar.cocomo.zinger.seller.model.ItemModel;
 import golhar.cocomo.zinger.seller.utils.Response;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.PATCH;
@@ -30,11 +31,11 @@ public interface ItemService {
     public Call<Response<String>> updateItemById(@Body ItemModel itemModel,
                                                  @Header("oauth_id") String oauthId, @Header("mobile") String mobileRh, @Header("role") String role);
 
-    @PATCH("/menu/delete/{itemId}")
+    @DELETE("/menu/delete/{itemId}")
     public Call<Response<String>> deleteItemById(@Path("itemId") Integer itemId,
                                                  @Header("oauth_id") String oauthId, @Header("mobile") String mobileRh, @Header("role") String role);
 
-    @PATCH("/menu/undelete")
+    @DELETE("/menu/undelete")
     public Call<Response<String>> unDeleteItemById(@Body ItemModel itemModel,
                                                    @Header("oauth_id") String oauthId, @Header("mobile") String mobileRh, @Header("role") String role);
 }

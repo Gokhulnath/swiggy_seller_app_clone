@@ -69,6 +69,8 @@ public class OrderHistoryItemDetailActivity extends AppCompatActivity {
     String role;
     UserRole userRole;
 
+    //todo ui fix remove delivery to
+
     @SuppressLint("ResourceAsColor")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
