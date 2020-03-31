@@ -12,8 +12,6 @@ public class UserModel implements Parcelable {
     private String email;
     private String oauthId;
     private UserRole role;
-    private Integer isDelete;
-
     public UserModel() {
     }
 
@@ -23,11 +21,6 @@ public class UserModel implements Parcelable {
         email = in.readString();
         oauthId = in.readString();
         role = role.valueOf(in.readString());
-        if (in.readByte() == 0) {
-            isDelete = null;
-        } else {
-            isDelete = in.readInt();
-        }
     }
 
     public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
@@ -82,13 +75,6 @@ public class UserModel implements Parcelable {
         this.role = role;
     }
 
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Integer isDelete) {
-        this.isDelete = isDelete;
-    }
 
     @Override
     public String toString() {
@@ -98,7 +84,6 @@ public class UserModel implements Parcelable {
                 ", email='" + email + '\'' +
                 ", oauthId='" + oauthId + '\'' +
                 ", role=" + role +
-                ", isDelete=" + isDelete +
                 '}';
     }
 
@@ -114,11 +99,5 @@ public class UserModel implements Parcelable {
         dest.writeString(email);
         dest.writeString(oauthId);
         dest.writeString(role.name());
-        if (isDelete == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(isDelete);
-        }
     }
 }

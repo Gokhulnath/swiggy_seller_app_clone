@@ -15,7 +15,6 @@ public class ShopModel implements Parcelable {
     private CollegeModel collegeModel;
     private Date openingTime;
     private Date closingTime;
-    private Integer isDelete;
 
     public ShopModel() {
         this.collegeModel = new CollegeModel();
@@ -33,11 +32,7 @@ public class ShopModel implements Parcelable {
         collegeModel = in.readParcelable(CollegeModel.class.getClassLoader());
         openingTime = (Date) in.readSerializable();
         closingTime = (Date) in.readSerializable();
-        if (in.readByte() == 0) {
-            isDelete = null;
-        } else {
-            isDelete = in.readInt();
-        }
+
     }
 
     public static final Creator<ShopModel> CREATOR = new Creator<ShopModel>() {
@@ -108,13 +103,6 @@ public class ShopModel implements Parcelable {
         this.closingTime = closingTime;
     }
 
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Integer isDelete) {
-        this.isDelete = isDelete;
-    }
 
     @Override
     public String toString() {
@@ -126,7 +114,6 @@ public class ShopModel implements Parcelable {
                 ", collegeModel=" + collegeModel +
                 ", openingTime=" + openingTime +
                 ", closingTime=" + closingTime +
-                ", isDelete=" + isDelete +
                 '}';
     }
 
@@ -149,11 +136,5 @@ public class ShopModel implements Parcelable {
         dest.writeParcelable(collegeModel, flags);
         dest.writeSerializable(openingTime);
         dest.writeSerializable(closingTime);
-        if (isDelete == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(isDelete);
-        }
     }
 }

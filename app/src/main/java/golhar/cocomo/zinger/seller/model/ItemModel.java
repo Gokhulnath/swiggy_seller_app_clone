@@ -12,7 +12,6 @@ public class ItemModel implements Parcelable {
     private ShopModel shopModel;
     private Integer isVeg;
     private Integer isAvailable;
-    private Integer isDelete;
 
     public ItemModel() {
         shopModel = new ShopModel();
@@ -43,11 +42,7 @@ public class ItemModel implements Parcelable {
         } else {
             isAvailable = in.readInt();
         }
-        if (in.readByte() == 0) {
-            isDelete = null;
-        } else {
-            isDelete = in.readInt();
-        }
+
     }
 
     public static final Creator<ItemModel> CREATOR = new Creator<ItemModel>() {
@@ -126,13 +121,7 @@ public class ItemModel implements Parcelable {
         this.isAvailable = isAvailable;
     }
 
-    public Integer getIsDelete() {
-        return isDelete;
-    }
 
-    public void setIsDelete(Integer isDelete) {
-        this.isDelete = isDelete;
-    }
 
     @Override
     public String toString() {
@@ -145,7 +134,6 @@ public class ItemModel implements Parcelable {
                 ", shopModel=" + shopModel +
                 ", isVeg=" + isVeg +
                 ", isAvailable=" + isAvailable +
-                ", isDelete=" + isDelete +
                 '}';
     }
 
@@ -183,12 +171,6 @@ public class ItemModel implements Parcelable {
         } else {
             dest.writeByte((byte) 1);
             dest.writeInt(isAvailable);
-        }
-        if (isDelete == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(isDelete);
         }
     }
 }

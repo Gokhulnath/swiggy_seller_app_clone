@@ -8,7 +8,6 @@ public class CollegeModel implements Parcelable {
     private String name;
     private String iconUrl;
     private String address;
-    private Integer isDelete;
 
     protected CollegeModel(Parcel in) {
         if (in.readByte() == 0) {
@@ -19,11 +18,7 @@ public class CollegeModel implements Parcelable {
         name = in.readString();
         iconUrl = in.readString();
         address = in.readString();
-        if (in.readByte() == 0) {
-            isDelete = null;
-        } else {
-            isDelete = in.readInt();
-        }
+
     }
 
     public static final Creator<CollegeModel> CREATOR = new Creator<CollegeModel>() {
@@ -51,7 +46,6 @@ public class CollegeModel implements Parcelable {
         this.name = name;
         this.iconUrl = iconUrl;
         this.address = address;
-        this.isDelete = isDelete;
     }
 
     public String getName() {
@@ -78,13 +72,6 @@ public class CollegeModel implements Parcelable {
         this.address = address;
     }
 
-    public Integer getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(Integer isDelete) {
-        this.isDelete = isDelete;
-    }
 
     @Override
     public String toString() {
@@ -93,7 +80,6 @@ public class CollegeModel implements Parcelable {
                 ", name='" + name + '\'' +
                 ", iconUrl='" + iconUrl + '\'' +
                 ", address='" + address + '\'' +
-                ", isDelete=" + isDelete +
                 '}';
     }
 
@@ -113,11 +99,5 @@ public class CollegeModel implements Parcelable {
         dest.writeString(name);
         dest.writeString(iconUrl);
         dest.writeString(address);
-        if (isDelete == null) {
-            dest.writeByte((byte) 0);
-        } else {
-            dest.writeByte((byte) 1);
-            dest.writeInt(isDelete);
-        }
     }
 }

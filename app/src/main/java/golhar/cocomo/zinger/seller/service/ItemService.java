@@ -30,8 +30,8 @@ public interface ItemService {
     public Call<Response<String>> updateItemById(@Body ItemModel itemModel,
                                                  @Header("oauth_id") String oauthId, @Header("mobile") String mobileRh, @Header("role") String role);
 
-    @PATCH("/menu/delete")
-    public Call<Response<String>> deleteItemById(@Body ItemModel itemModel,
+    @PATCH("/menu/delete/{itemId}")
+    public Call<Response<String>> deleteItemById(@Path("itemId") Integer itemId,
                                                  @Header("oauth_id") String oauthId, @Header("mobile") String mobileRh, @Header("role") String role);
 
     @PATCH("/menu/undelete")

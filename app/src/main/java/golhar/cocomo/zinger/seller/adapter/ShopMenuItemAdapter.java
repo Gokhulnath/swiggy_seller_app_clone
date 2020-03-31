@@ -127,14 +127,7 @@ public class ShopMenuItemAdapter extends RecyclerView.Adapter<ShopMenuItemAdapte
                         } else if (UserRole.SHOP_OWNER.toString().equals(role)) {
                             userRole = UserRole.SHOP_OWNER;
                         }
-                        ItemModel itemModel1 = itemModel;
-                        itemModel1.setIsDelete(null);
-                        itemModel1.setIsAvailable(null);
-                        itemModel1.setName(null);
-                        itemModel1.setPhotoUrl(null);
-                        itemModel1.setCategory(null);
-                        itemModel1.setPrice(null);
-                        MainRepository.getItemService().deleteItemById(itemModel1,authid,phoneNumber,userRole.toString()).enqueue(new Callback<Response<String>>() {
+                        MainRepository.getItemService().deleteItemById(itemModel.getId(),authid,phoneNumber,userRole.toString()).enqueue(new Callback<Response<String>>() {
                             @Override
                             public void onResponse(Call<Response<String>> call, retrofit2.Response<Response<String>> response) {
                                 Response<String> responseFromServer = response.body();

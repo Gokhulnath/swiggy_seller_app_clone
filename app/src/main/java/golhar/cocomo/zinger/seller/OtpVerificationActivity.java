@@ -160,7 +160,6 @@ public class OtpVerificationActivity extends AppCompatActivity {
                     userModel.setMobile(phNumber);
                     userModel.setOauthId(authId);
                     userModel.setRole(userRole);
-                    userModel.setIsDelete(0);
                     MainRepository.getUserService().insertSeller(userModel).enqueue(new Callback<Response<UserShopListModel>>() {
                         @Override
                         public void onResponse(Call<Response<UserShopListModel>> call, retrofit2.Response<Response<UserShopListModel>> response) {
